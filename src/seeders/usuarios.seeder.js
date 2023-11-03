@@ -16,12 +16,12 @@ function seedDatabase() {
             nivel, puntaje, cant_estrellas, lecc_comp, cuest_comp, created_at, deleted) VALUES (?,?,?,?,'abc',1,0,0,0,0,now(),0)`;
 
         const usuarios = [
-            { id_usuario: 1, username: 'usuario1', email: 'email1@gmail.com', password: bcrypt.hashSync('1234', 10) },
-            { id_usuario: 2, username: 'usuario2', email: 'email2@gmail.com', password: bcrypt.hashSync('1234', 10) },
-            { id_usuario: 3, username: 'usuario3', email: 'email3@gmail.com', password: bcrypt.hashSync('1234', 10) },
-            { id_usuario: 4, username: 'usuario4', email: 'email4@gmail.com', password: bcrypt.hashSync('1234', 10) },
-            { id_usuario: 5, username: 'usuario5', email: 'email5@gmail.com', password: bcrypt.hashSync('1234', 10) },
-            { id_usuario: 6, username: 'usuario6', email: 'email6@gmail.com', password: bcrypt.hashSync('1234', 10) },
+            { username: 'usuario1', email: 'email1@gmail.com', password: bcrypt.hashSync('1234', 10) },
+            { username: 'usuario2', email: 'email2@gmail.com', password: bcrypt.hashSync('1234', 10) },
+            { username: 'usuario3', email: 'email3@gmail.com', password: bcrypt.hashSync('1234', 10) },
+            { username: 'usuario4', email: 'email4@gmail.com', password: bcrypt.hashSync('1234', 10) },
+            { username: 'usuario5', email: 'email5@gmail.com', password: bcrypt.hashSync('1234', 10) },
+            { username: 'usuario6', email: 'email6@gmail.com', password: bcrypt.hashSync('1234', 10) },
         ];
 
         for (const usuario of usuarios) {

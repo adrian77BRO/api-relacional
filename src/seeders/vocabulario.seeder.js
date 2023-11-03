@@ -22,8 +22,8 @@ const librosSeedData = [
 // Seeder function
 const seedLibros = () => {
     librosSeedData.forEach(libro => {
-        conexion.query('INSERT INTO libro_vocabulario (titulo, descripcion, contenido) VALUES (?, ?, ?)',
-            [libro.titulo, libro.descripcion, libro.contenido], (error) => {
+        conexion.query('INSERT INTO libro_vocabulario (id_libro_voc, titulo, descripcion, contenido, created_at, deleted) VALUES (?, ?, ?, ?, now(), 0)',
+            [libro.id_libro_voc, libro.titulo, libro.descripcion, libro.contenido], (error) => {
                 if (error) {
                     console.error('Error al insertar datos de libro:', error.message);
                 } else {

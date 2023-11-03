@@ -171,7 +171,8 @@ module.exports = {
     obtenerCuentos,
     consultarCuento,
     agregarCuento,
-    eliminarCuento: eliminarCuentoFisico,
+    eliminarCuentoFisico,
     editarCuentoParcial,
-    editarCuentoTotal
+    editarCuentoTotal,
+    eliminarCuentoLogico
 }

@@ -3,7 +3,7 @@ const conexion = require('../db/database');
 const obtenerLibros = (req, res) => {
     const { page, limit } = req.query;
 
-    let consulta = `SELECT * FROM libro_vocabulario`;
+    let consulta = `SELECT * FROM libro_vocabulario WHERE deleted = 0`;
 
     if (page && limit) {
         const offset = (parseInt(page) - 1) * parseInt(limit);
@@ -25,8 +25,8 @@ const obtenerLibros = (req, res) => {
 }
 
 const consultarLibro = (req, res) => {
-    const id_libro_vocabulario = req.params.id;
-    conexion.query('SELECT * FROM libro_vocabulario WHERE id = ?', [id_libro_vocabulario], (error, result) => {
+    const id_libro_voc = req.params.id;
+    conexion.query('SELECT * FROM libro_vocabulario WHERE id_libro_voc = ? AND deleted = 0', [id_libro_voc], (error, result) => {
         if (error) {
             return res.status(500).json({
                 message: 'Error al consultar el libro',
@@ -47,23 +47,24 @@ const consultarLibro = (req, res) => {
 }
 
 const agregarLibro = (req, res) => {
-    const { titulo, descripcion, contenido } = req.body;
-    conexion.query('INSERT INTO libro_vocabulario (titulo, descripcion, contenido) VALUES (?, ?, ?)', [titulo, descripcion, contenido], (error) => {
-        if (error) {
-            return res.status(500).json({
-                message: 'Error al agregar el libro',
-                error: error.message
+    const { id_libro_voc, titulo, descripcion, contenido } = req.body;
+    conexion.query('INSERT INTO libro_vocabulario (id_libro_voc, titulo, descripcion, contenido, created_at, deleted) VALUES (?, ?, ?, ?, now(), 0)',
+        [id_libro_voc, titulo, descripcion, contenido], (error) => {
+            if (error) {
+                return res.status(500).json({
+                    message: 'Error al agregar el libro',
+                    error: error.message
+                });
+            }
+            return res.status(200).json({
+                message: 'Libro agregado exitosamente',
             });
-        }
-        return res.status(200).json({
-            message: 'Libro agregado exitosamente',
         });
-    });
 }
 
 const eliminarLibroLogico = (req, res) => {
-    const id_libro_vocabulario = req.params.id;
-    conexion.query('UPDATE libro_vocabulario SET deleted_at = now() WHERE id = ?', [id_libro_vocabulario], (error, result) => {
+    const id_libro_voc = req.params.id;
+    conexion.query('UPDATE libro_vocabulario SET deleted_at = now() WHERE id_libro_voc = ?', [id_libro_voc], (error, result) => {
         if (error) {
             return res.status(500).json({
                 message: 'Error al eliminar el libro',
@@ -83,8 +84,8 @@ const eliminarLibroLogico = (req, res) => {
 }
 
 const eliminarLibroFisico = (req, res) => {
-    const id_libro_vocabulario = req.params.id;
-    conexion.query('DELETE FROM libro_vocabulario WHERE id = ?', [id_libro_vocabulario], (error, result) => {
+    const id_libro_voc = req.params.id;
+    conexion.query('DELETE FROM libro_vocabulario WHERE id_libro_voc = ?', [id_libro_voc], (error, result) => {
         if (error) {
             return res.status(500).json({
                 message: 'Error al eliminar el libro',
@@ -104,11 +105,11 @@ const eliminarLibroFisico = (req, res) => {
 }
 
 const editarLibroParcial = (req, res) => {
-    const id_libro_vocabulario = req.params.id;
+    const id_libro_voc = req.params.id;
     const { titulo, descripcion, contenido } = req.body;
     conexion.query(`UPDATE libro_vocabulario SET titulo = IFNULL(?,titulo), descripcion = IFNULL(?,descripcion),
-    contenido = IFNULL(?,contenido), updated_at = now() WHERE id = ?`,
-        [titulo, descripcion, contenido, id_libro_vocabulario], (error, result) => {
+    contenido = IFNULL(?,contenido), updated_at = now() WHERE id_libro_voc = ?`,
+        [titulo, descripcion, contenido, id_libro_voc], (error, result) => {
             if (error) {
                 return res.status(500).json({
                     message: 'Error al editar el libro',
@@ -128,10 +129,10 @@ const editarLibroParcial = (req, res) => {
 }
 
 const editarLibroTotal = (req, res) => {
-    const id_libro_vocabulario = req.params.id;
+    const id_libro_voc = req.params.id;
     const { titulo, descripcion, contenido } = req.body;
     conexion.query(`UPDATE libro_vocabulario SET titulo = ?, descripcion = ?, contenido = ?, updated_at = now()
-    WHERE id = ?`, [titulo, descripcion, contenido, id_libro_vocabulario], (error, result) => {
+    WHERE id_libro_voc = ?`, [titulo, descripcion, contenido, id_libro_voc], (error, result) => {
         if (error) {
             return res.status(500).json({
                 message: 'Error al editar el libro',

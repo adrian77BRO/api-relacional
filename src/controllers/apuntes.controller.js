@@ -170,7 +170,7 @@ module.exports = {
     obtenerApuntes,
     consultarApunte,
     agregarApunte,
-    eliminarApunte: eliminarApunteFisico,
+    eliminarApunte: eliminarApunteLogico,
     editarApunteParcial,
     editarApunteTotal
 }

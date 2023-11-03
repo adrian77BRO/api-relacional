@@ -63,11 +63,10 @@ const agregarUsuario = (req, res) => {
                 message: 'El correo electrónico ya existe'
             });
         } else {
-            const random = Math.floor(Math.random() * (1000 + 1) + 1);
             const encriptado = bcrypt.hashSync(password, 10)
             conexion.query(`INSERT INTO usuario (id_usuario, username, email, password, etapas, nivel, puntaje,
-                cant_estrellas, lecc_comp, cuest_comp, created_at, deleted) VALUES (${random},?,?,'${encriptado}',
-                'abc',1,0,0,0,0,now(),0)`, [username, email, password], (error) => {
+                cant_estrellas, lecc_comp, cuest_comp, created_at, deleted) VALUES (?,?,?,'${encriptado}',
+                'abc',1,0,0,0,0,now(),0)`, [id_usuario, username, email, password], (error) => {
                 if (error) {
                     return res.status(500).json({
                         message: 'Error al agregar el usuario',
@@ -177,7 +176,8 @@ module.exports = {
     obtenerUsuarios,
     consultarUsuario,
     agregarUsuario,
-    eliminarUsuario: eliminarUsuarioFisico,
+    eliminarUsuarioLogico,
+    eliminarUsuarioFisico,
     editarUsuarioParcial,
     editarUsuarioTotal
 }
