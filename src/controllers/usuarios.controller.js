@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt');
 const obtenerUsuarios = (req, res) => {
     const { page, limit } = req.query;
 
-    let consulta = `SELECT username, email, password, created_at, updated_at, deleted_at, deleted FROM usuario`;
+    let consulta = `SELECT username, email, password, created_at, updated_at, deleted_at,
+    deleted FROM usuario WHERE deleted = 0`;
 
     if (page && limit) {
         const offset = (parseInt(page) - 1) * parseInt(limit);
@@ -28,7 +29,7 @@ const obtenerUsuarios = (req, res) => {
 const consultarUsuario = (req, res) => {
     const id_usuario = req.params.id;
     conexion.query(`SELECT username, email, password, created_at, updated_at, deleted_at,
-    deleted FROM usuario WHERE id_usuario = ?`, [id_usuario], (error, result) => {
+    deleted FROM usuario WHERE id_usuario = ? AND deleted = 0`, [id_usuario], (error, result) => {
         if (error) {
             return res.status(500).json({
                 message: 'Error al consultar el usuario',

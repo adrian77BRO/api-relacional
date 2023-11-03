@@ -3,7 +3,7 @@ const conexion = require('../db/database');
 const obtenerCuentos = (req, res) => {
     const { page, limit } = req.query;
 
-    let consulta = `SELECT * FROM libro_historia`;
+    let consulta = `SELECT * FROM libro_historia WHERE deleted = 0`;
 
     if (page && limit) {
         const offset = (parseInt(page) - 1) * parseInt(limit);
@@ -26,7 +26,7 @@ const obtenerCuentos = (req, res) => {
 
 const consultarCuento = (req, res) => {
     const id_libro_his = req.params.id;
-    conexion.query('SELECT * FROM libro_historia WHERE id_libro_his = ?', [id_libro_his], (error, result) => {
+    conexion.query('SELECT * FROM libro_historia WHERE id_libro_his = ? AND deleted = 0', [id_libro_his], (error, result) => {
         if (error) {
             return res.status(500).json({
                 message: 'Error al consultar el cuento',
