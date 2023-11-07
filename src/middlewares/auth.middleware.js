@@ -11,10 +11,7 @@ function verificarToken(req, res, next) {
 
     try {
         const decoded = jwt.verify(token, 'secreto');
-        req.user = {
-            id: decoded.user.id,
-            username: decoded.user.username
-        }
+        req.user = decoded.user;
         next();
       } catch (error) {
         return res.status(401).json({
