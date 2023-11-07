@@ -26,7 +26,9 @@ const login = (req, res) => {
             })
         } else {
             const payload = {
-                id: encontrado.id_usuario,
+                user: {
+                    id: encontrado.id_usuario
+                }
             };
 
             const token = jwt.sign(payload, 'secreto', { expiresIn: '1h' });

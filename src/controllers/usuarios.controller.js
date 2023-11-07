@@ -4,8 +4,8 @@ const bcrypt = require('bcrypt');
 const obtenerUsuarios = (req, res) => {
     const { page, limit } = req.query;
 
-    let consulta = `SELECT username, email, password, created_at, updated_at, deleted_at,
-    deleted FROM usuario WHERE deleted = 0`;
+    let consulta = `SELECT id_usuario, username, email, password, created_at, created_by,
+    updated_at, deleted_at, deleted FROM usuario WHERE deleted = 0`;
 
     if (page && limit) {
         const offset = (parseInt(page) - 1) * parseInt(limit);
@@ -51,6 +51,8 @@ const consultarUsuario = (req, res) => {
 
 const agregarUsuario = (req, res) => {
     const { id_usuario, username, email, password } = req.body;
+    const auth = req.user.id;
+
     conexion.query('SELECT * FROM usuario WHERE id_usuario = ? OR email = ?', [id_usuario, email], (error, result) => {
         if (error) {
             return res.status(500).json({
@@ -65,8 +67,8 @@ const agregarUsuario = (req, res) => {
         } else {
             const encriptado = bcrypt.hashSync(password, 10)
             conexion.query(`INSERT INTO usuario (id_usuario, username, email, password, etapas, nivel, puntaje,
-                cant_estrellas, lecc_comp, cuest_comp, created_at, deleted) VALUES (?,?,?,'${encriptado}',
-                'abc',1,0,0,0,0,now(),0)`, [id_usuario, username, email, password], (error) => {
+                cant_estrellas, lecc_comp, cuest_comp, created_at, created_by, deleted) VALUES (?,?,?,'${encriptado}',
+                'abc',1,0,0,0,0,now(),${auth},0)`, [id_usuario, username, email, password], (error) => {
                 if (error) {
                     return res.status(500).json({
                         message: 'Error al agregar el usuario',

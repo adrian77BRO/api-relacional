@@ -9,17 +9,18 @@ function verificarToken(req, res, next) {
         });
     }
 
-    jwt.verify(token, 'secreto', (error, decode) => {
-        if (error) {
-            return res.status(401).send({
-                message: 'Error al validar token',
-                error: error.message
-            });
+    try {
+        const decoded = jwt.verify(token, 'secreto');
+        req.user = {
+            id: decoded.user.id,
+            username: decoded.user.username
         }
-
-        req.user = decode.user;
         next();
-    })
+      } catch (error) {
+        return res.status(401).json({
+            message: 'Token inválido'
+        });
+      }
 }
 
 module.exports = { verificarToken }
